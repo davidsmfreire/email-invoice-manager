@@ -12,4 +12,6 @@ Right now, these are the supported platforms:
 
 ## Running the CLI
 
+Unfortunately, if you want to scrape invoice prices from PDF attachments, this CLI call to an external tool called `pdftotext`, which comes in a bundle of tools called [poppler-utils](https://www.google.com/search?q=how+to+install+poppler+utils). Make sure it is installed on your system and available in the PATH.
+
 Either just do `go run .` or `go build` and use the executable `./email-invoice-manager`.
