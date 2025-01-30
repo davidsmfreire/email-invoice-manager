@@ -1,0 +1,32 @@
+[
+    {
+        "Name": "Bills A",
+        "DriveDestination": "[redacted]",
+        "Sources": [
+            {
+                "BillName": "eletricidade",
+                "From": "facturaelectronica@eem.pt",
+                "SubjectContains": "Envio de Fatura Eletrónica EEM",
+                "Location": "attachment",
+                "StringBeforePrice": "MONTANTE:",
+                "StringAfterPrice": "€"
+            },
+            {
+                "BillName": "água",
+                "From": "noreply.fe@arm.pt",
+                "SubjectContains": "Envio de Documento de Pagamento",
+                "Location": "body",
+                "StringBeforePrice": "Valor a Pagar",
+                "StringAfterPrice": "€"
+            },
+            {
+                "BillName": "net",
+                "From": "faturaNOS@fe.nos.pt",
+                "SubjectContains": "Fatura Eletrónica NOS MADEIRA",
+                "Location": "body",
+                "StringBeforePrice": "Valor",
+                "StringAfterPrice": "Esta fatura"
+            }
+        ]
+    }
+]
