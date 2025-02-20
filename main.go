@@ -566,8 +566,6 @@ func main() {
 	if month == "now" {
 		now := time.Now()
 		monthTime = time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, time.UTC)
-		fmt.Printf("monthTime: %v\n", monthTime)
-		return
 	} else {
 		monthTime, err = time.Parse("2006-01", month)
 		if err != nil {
