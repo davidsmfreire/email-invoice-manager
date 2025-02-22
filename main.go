@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -463,14 +464,20 @@ func readConfiguration() []SourceConfig {
 }
 
 // Sends invoice summary through Signal
-func sendNotification(invoiceGroups []InvoiceGroup, dryRun bool) {
+func sendNotification(invoiceGroups []InvoiceGroup, dryRun bool) error {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
 	phoneNumber := os.Getenv("CALLMEBOT_PHONE_NUMBER")
+	if phoneNumber == "" {
+		return errors.New("CALLMEBOT_PHONE_NUMBER is not set")
+	}
 	apiKey := os.Getenv("CALLMEBOT_API_KEY")
+	if apiKey == "" {
+		return errors.New("CALLMEBOT_API_KEY is not set")
+	}
 
 	apiUrl := fmt.Sprintf(
 		"https://api.callmebot.com/signal/send.php?phone=%s&apikey=%s&text=",
@@ -510,7 +517,7 @@ func sendNotification(invoiceGroups []InvoiceGroup, dryRun bool) {
 	fmt.Println(message.String())
 
 	if dryRun {
-		return
+		return nil
 	}
 
 	resp, err := http.Get(apiUrl + url.QueryEscape(message.String()))
@@ -523,6 +530,8 @@ func sendNotification(invoiceGroups []InvoiceGroup, dryRun bool) {
 	}
 
 	defer resp.Body.Close()
+
+	return nil
 }
 
 func loadAuthenticatedGoogleClient(scope ...string) *http.Client {
@@ -548,7 +557,11 @@ func invoiceManager(month time.Time) {
 	invoiceGroups := scrapeEmailInvoices(googleClient, month, configs)
 	fmt.Printf("invoiceGroups: %v\n", invoiceGroups)
 	saveInvoices(googleClient, month, invoiceGroups)
-	sendNotification(invoiceGroups, false)
+	err := sendNotification(invoiceGroups, false)
+
+	if err != nil {
+		log.Fatalf("Unable to send notification: %v", err)
+	}
 }
 
 func main() {
