@@ -171,6 +171,7 @@ func extractPriceBetweenTwoStrings(haystack string, firstString string, secondSt
 	euros = strings.Trim(euros, " \n\t€abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 	cents := strings.Replace(euros, ",", "", 1)
+	cents = strings.Replace(cents, ".", "", 1)
 
 	centsValue, err := strconv.ParseUint(cents, 10, 16)
 
